@@ -21,6 +21,9 @@ class Ads(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.CharField(max_length=2, choices=TYPE, default='TK')
 
+    def __str__(self):
+        return self.header.title()
+
 
 class Response(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
