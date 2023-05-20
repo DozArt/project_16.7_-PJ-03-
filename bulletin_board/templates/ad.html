@@ -1,11 +1,24 @@
 {% extends 'flatpages/default.html' %}
 
 {% block title %}
-Post
+Ads
 {% endblock title %}
 
 {% block content %}
+<br>
+<div class="text-secondary">{{ ad.date_create|date:'d M Y' }}</div>
+
+{% if perms.ads.delete_post %}
+    <a href="{{ ad.id }}/delete/">Delete 🗑</a>
+{% endif %}
+{% if perms.ads.change_post %}
+    <a href="{{ ad.id }}/update/">Edit ✏</a>
+{% endif %}
 <h1>{{ ad.header }}</h1>
-<h3>{{ ad.date_create|date:'d M Y' }}</h3>
 <p>{{ ad.text }}</p>
+<div class="">
+    <a href="{% url 'responses_create' ad=ad.id %}">
+        Откликнуться
+    </a>
+</div>
 {% endblock content %}

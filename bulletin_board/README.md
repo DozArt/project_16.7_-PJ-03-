@@ -9,10 +9,10 @@
 # install
         venv\scripts\activate
         pip install django
-
         pip install django-filter
-        pip install allauth
         pip install django-allauth
+
+        pip install allauth
         pip install django_apscheduler
         pip install celery
         pip install redis
@@ -24,13 +24,3 @@
         python manage.py runserver
 
     local address - http://127.0.0.1:8000/
-
-# navigation menu caching for 30 seconds
-        All posts
-        News
-        Articles
-        Subscriptions 🕭
-        Search🔍︎
-# urls.news_list caching for 60 seconds
-
-# urls.one_news caching for 5 minutes

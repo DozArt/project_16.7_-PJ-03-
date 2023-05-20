@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 
 class Ads(models.Model):
@@ -23,6 +24,9 @@ class Ads(models.Model):
 
     def __str__(self):
         return self.header.title()
+
+    def get_absolute_url(self):
+        return reverse('ad', args=[str(self.id)])
 
 
 class Response(models.Model):

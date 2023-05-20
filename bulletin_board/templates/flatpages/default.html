@@ -6,7 +6,7 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         {% load static %}
-        {% load cache %}
+        {% load account %}
         <title>
 		{% block title %}
 		{{ flatpage.content }}
@@ -32,8 +32,20 @@
                             <a class="nav-link" href="{% url 'ad_create' %}">Add</a>
                         </li>
                         <li class="nav-item active">
-                            <a class="nav-link" href="{% url 'ads_list' %}">Response</a>
+                            <a class="nav-link" href="{% url 'responses' %}">Responses</a>
                         </li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'account_email' %}">Вы вошли как: {% user_display user %}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'account_logout' %}">logout</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'account_login' %}">login⎆</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>

@@ -1,27 +1,25 @@
 <!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
 
+
 <!-- В контенте на странице мы выводим все товары -->
 {% block content %}
-<h1>Объявления</h1>
+<h1>Отклики</h1>
 
-{% for ad in ads %}
-    <hr>
-    <h4>
-        <a href="{% url 'ads_list' %}{{ ad.id }}">
-            {{ ad.header }}
-        </a>
-    </h4>
-    <div class="text-secondary">
-        {{ ad.get_category_display }}
-    </div>
-    <div class="text-secondary">{{ ad.date_create|date:'d M Y' }}</div>
-    <p>{{ ad.text|truncatewords:20}}</p>
-    <div class="">
-        <a href="{% url 'responses_create' ad.id %}">
-            Откликнуться
-        </a>
-    </div>
+   <form action="" method="get">
+       {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
+       {{ filterset.form.as_p }}
+       {# Добавим кнопку отправки данных формы #}
+       <input type="submit" value="Найти" />
+   </form>
+
+{% for response in responses %}
+    {% if response.author == response.author %}
+        <h5>{{ response.author }}</h5>
+        <hr>
+        <h4>{{ response.ads }}</h4>
+        <p>{{ response.text}}</p>
+    {% endif %}
 {% endfor %}
 
     {% if page_obj.has_previous %}
