@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -48,12 +49,12 @@ class ResponseList(ListView):
     ordering = 'id'
     template_name = 'response.html'
     context_object_name = 'responses'
-    paginate_by = 2
+    paginate_by = 5
 
     def get_queryset(self):
         queryset = super().get_queryset()
         self.filterset = ResponseFilter(self.request.GET, queryset)
-        return self.filterset.qs
+        return self.filterset.qs.filter(ads__author=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -66,11 +67,14 @@ class ResponseCreate(CreateView):
     model = Response
     template_name = 'response_create.html'
 
-    def responses_create(self, ad):
-        self.group = Ads.objects.get(id=ad)
-
     def form_valid(self, form):
         response = form.save(commit=False)
+        self.ads = get_object_or_404(Ads, id=self.kwargs['ad'])
         response.author = self.request.user
-        response.ads = self.group  # все еще не работает
+        form.instance.ads = self.ads
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['adheader'] = str(Ads.objects.get(id=self.kwargs['ad']))
+        return context

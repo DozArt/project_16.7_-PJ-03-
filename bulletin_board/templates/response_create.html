@@ -1,7 +1,7 @@
 {% extends 'flatpages/default.html' %}
 
 {% block content %}
-<h1>"Название объявления"</h1>
+<h1>Откликнуться на - {{ adheader }}</h1>
 <hr>
 <form action="" method="post">
     {% csrf_token %}

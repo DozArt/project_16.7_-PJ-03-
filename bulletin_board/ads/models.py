@@ -33,3 +33,6 @@ class Response(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     ads = models.ForeignKey(Ads, on_delete=models.CASCADE)
     text = models.TextField()
+
+    def get_absolute_url(self):
+        return reverse('ad', args=[str(self.ads.id)])

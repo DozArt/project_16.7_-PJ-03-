@@ -10,12 +10,12 @@
     <h4>
         <a href="{% url 'ads_list' %}{{ ad.id }}">
             {{ ad.header }}
-        </a>
+        </a> - {{ ad.date_create|date:'d M Y' }}
     </h4>
     <div class="text-secondary">
         {{ ad.get_category_display }}
     </div>
-    <div class="text-secondary">{{ ad.date_create|date:'d M Y' }}</div>
+    <div class="text-secondary">{{ ad.author }}</div>
     <p>{{ ad.text|truncatewords:20}}</p>
     <div class="">
         <a href="{% url 'responses_create' ad.id %}">
