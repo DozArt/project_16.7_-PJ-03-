@@ -78,3 +78,9 @@ class ResponseCreate(CreateView):
         context = super().get_context_data(**kwargs)
         context['adheader'] = str(Ads.objects.get(id=self.kwargs['ad']))
         return context
+
+
+class ResponseDelete(DeleteView):
+    model = Response
+    template_name = 'response_delete.html'
+    success_url = reverse_lazy('responses')

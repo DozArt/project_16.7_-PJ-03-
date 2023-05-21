@@ -16,6 +16,8 @@
         {% if response.author == response.author %}
             <h4>{{ response.ads }}</h4>
             <p>{{ response.text}}</p>
+            <a href="{% url 'response_delete' response.id %}">Delete 🗑</a>
+            <hr>
         {% endif %}
     {% endfor %}
 
