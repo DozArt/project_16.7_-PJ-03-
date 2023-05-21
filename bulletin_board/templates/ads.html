@@ -16,14 +16,14 @@
         {{ ad.get_category_display }}
     </div>
     <div class="text-secondary">{{ ad.author }}</div>
-    <p>{{ ad.text|truncatewords:20}}</p>
+    <p>{{ ad.text|safe}}</p>
     <div class="">
         <a href="{% url 'responses_create' ad.id %}">
             Откликнуться
         </a>
     </div>
 {% endfor %}
-
+    <hr>
     {% if page_obj.has_previous %}
        <a href="?page=1">1</a>
        {% if page_obj.previous_page_number != 1 %}

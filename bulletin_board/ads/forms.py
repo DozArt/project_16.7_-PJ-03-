@@ -1,8 +1,11 @@
+from ckeditor.widgets import CKEditorWidget
 from django import forms
 from .models import Ads, Response
 
 
 class AdForm(forms.ModelForm):
+    text = forms.CharField(widget=CKEditorWidget())
+
     class Meta:
         model = Ads
         fields = [

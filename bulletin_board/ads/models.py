@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from ckeditor.fields import RichTextField
 from django.urls import reverse
 
 
@@ -17,13 +18,13 @@ class Ads(models.Model):
         ('SM', 'Spell master'),
     ]
     header = models.CharField(max_length=128)
-    text = models.TextField()
+    text = RichTextField()
     date_create = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.CharField(max_length=2, choices=TYPE, default='TK')
 
     def __str__(self):
-        return self.header.title()
+        return self.header
 
     def get_absolute_url(self):
         return reverse('ad', args=[str(self.id)])

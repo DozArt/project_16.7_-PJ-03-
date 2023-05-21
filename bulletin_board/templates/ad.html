@@ -15,7 +15,7 @@ Ads
     <a href="{{ ad.id }}/update/">Edit ✏</a>
 {% endif %}
 <h1>{{ ad.header }}</h1>
-<p>{{ ad.text }}</p>
+<p>{{ ad.text|safe }}</p>
 <div class="">
     <a href="{% url 'responses_create' ad=ad.id %}">
         Откликнуться
