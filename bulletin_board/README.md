@@ -12,8 +12,8 @@
         pip install django-filter
         pip install django-allauth
         pip install django-ckeditor
-
         pip install allauth
+
         pip install django_apscheduler
         pip install celery
         pip install redis

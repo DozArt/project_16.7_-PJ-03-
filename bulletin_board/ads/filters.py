@@ -1,4 +1,4 @@
-from django_filters import FilterSet
+from django_filters import FilterSet, ModelChoiceFilter
 from .models import Response
 
 
@@ -6,5 +6,5 @@ class ResponseFilter(FilterSet):
     class Meta:
         model = Response
         fields = {
-            'ads__category': ['exact'],
+            'ads': ['exact'],
         }

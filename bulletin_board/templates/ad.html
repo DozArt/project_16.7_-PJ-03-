@@ -8,10 +8,10 @@ Ads
 <br>
 <div class="text-secondary">{{ ad.date_create|date:'d M Y' }}</div>
 
-{% if perms.ads.delete_post %}
+{% if user.is_authenticated %}
     <a href="{{ ad.id }}/delete/">Delete 🗑</a>
 {% endif %}
-{% if perms.ads.change_post %}
+{% if user.is_authenticated %}
     <a href="{{ ad.id }}/update/">Edit ✏</a>
 {% endif %}
 <h1>{{ ad.header }}</h1>

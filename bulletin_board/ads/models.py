@@ -4,24 +4,20 @@ from ckeditor.fields import RichTextField
 from django.urls import reverse
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    subscribers = models.ManyToManyField(User, through='Subscriber')
+
+    def __str__(self):
+        return self.name
+
+
 class Ads(models.Model):
-    TYPE = [
-        ('TK', 'Tank'),
-        ('HL', 'Healer'),
-        ('DD', 'Damage dealer'),
-        ('TR', 'Trader'),
-        ('GM', 'Guild master'),
-        ('QG', 'Quest giver'),
-        ('WS', 'Warsmith'),
-        ('TN', 'Tanner'),
-        ('PM', 'Potion maker'),
-        ('SM', 'Spell master'),
-    ]
     header = models.CharField(max_length=128)
     text = RichTextField()
     date_create = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.CharField(max_length=2, choices=TYPE, default='TK')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.header
@@ -34,6 +30,12 @@ class Response(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     ads = models.ForeignKey(Ads, on_delete=models.CASCADE)
     text = models.TextField()
+    status = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('ad', args=[str(self.ads.id)])
+
+
+class Subscriber(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)

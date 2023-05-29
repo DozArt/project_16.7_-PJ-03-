@@ -1,5 +1,6 @@
 from ckeditor.widgets import CKEditorWidget
 from django import forms
+
 from .models import Ads, Response
 
 
@@ -20,4 +21,12 @@ class ResponseForm(forms.ModelForm):
         model = Response
         fields = [
             'text',
+        ]
+
+
+class ResponseFormUpdate(forms.ModelForm):
+    class Meta:
+        model = Response
+        fields = [
+            'status',
         ]

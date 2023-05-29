@@ -1,10 +1,13 @@
-from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
+from django.db.models import Exists, OuterRef
+from django.views.decorators.csrf import csrf_protect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .filters import ResponseFilter
-from .forms import AdForm, ResponseForm
-from .models import Ads, Response
+from .forms import AdForm, ResponseForm, ResponseFormUpdate
+from .models import Ads, Response, Category, Subscriber
 
 
 class AdsList(ListView):
@@ -80,7 +83,44 @@ class ResponseCreate(CreateView):
         return context
 
 
+class ResponseUpdate(UpdateView):
+    form_class = ResponseFormUpdate
+    model = Response
+    template_name = 'response_update.html'
+
+
 class ResponseDelete(DeleteView):
     model = Response
     template_name = 'response_delete.html'
     success_url = reverse_lazy('responses')
+
+
+@login_required
+@csrf_protect
+def subscriptions(request):
+    if request.method == 'POST':
+        category_id = request.POST.get('category_id')
+        category = Category.objects.get(id=category_id)
+        action = request.POST.get('action')
+
+        if action == 'subscribe':
+            Subscriber.objects.create(user=request.user, category=category)
+        elif action == 'unsubscribe':
+            Subscriber.objects.filter(
+                user=request.user,
+                category=category,
+            ).delete()
+
+    categories_with_subscriptions = Category.objects.annotate(
+        user_subscribed=Exists(
+            Subscriber.objects.filter(
+                user=request.user,
+                category=OuterRef('pk'),
+            )
+        )
+    )
+    return render(
+        request,
+        'subscriptions.html',
+        {'categories': categories_with_subscriptions},
+    )
