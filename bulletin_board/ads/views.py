@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.db.models import Exists, OuterRef
@@ -24,7 +25,7 @@ class AdDetail(DetailView):
     context_object_name = 'ad'
 
 
-class AdCreate(CreateView):
+class AdCreate(LoginRequiredMixin, CreateView):
     form_class = AdForm
     model = Ads
     template_name = 'ad_create.html'
@@ -35,19 +36,19 @@ class AdCreate(CreateView):
         return super().form_valid(form)
 
 
-class AdUpdate(UpdateView):
+class AdUpdate(LoginRequiredMixin, UpdateView):
     form_class = AdForm
     model = Ads
     template_name = 'ad_update.html'
 
 
-class AdDelete(DeleteView):
+class AdDelete(LoginRequiredMixin, DeleteView):
     model = Ads
     template_name = 'ad_delete.html'
     success_url = reverse_lazy('ads_list')
 
 
-class ResponseList(ListView):
+class ResponseList(LoginRequiredMixin, ListView):
     model = Response
     ordering = 'id'
     template_name = 'response.html'
@@ -65,7 +66,7 @@ class ResponseList(ListView):
         return context
 
 
-class ResponseCreate(CreateView):
+class ResponseCreate(LoginRequiredMixin, CreateView):
     form_class = ResponseForm
     model = Response
     template_name = 'response_create.html'
@@ -83,13 +84,37 @@ class ResponseCreate(CreateView):
         return context
 
 
-class ResponseUpdate(UpdateView):
+class ResponseDetail(LoginRequiredMixin, DetailView):
+    model = Response
+    template_name = 'response_detail.html'
+    context_object_name = 'response_detail'
+
+    def post(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            print("zapros POST")
+            response_id = request.POST.get('response_detail_id')
+            response = Response.objects.get(id=response_id)
+            action = request.POST.get('action')
+            if action == 'subscribe':
+                response.status = True
+                response.save()
+            elif action == 'unsubscribe':
+                response.status = False
+                response.save()
+        return render(
+            request,
+            'response_detail.html',
+            {'response_detail': response},
+        )
+
+
+class ResponseUpdate(LoginRequiredMixin, UpdateView):
     form_class = ResponseFormUpdate
     model = Response
     template_name = 'response_update.html'
 
 
-class ResponseDelete(DeleteView):
+class ResponseDelete(LoginRequiredMixin, DeleteView):
     model = Response
     template_name = 'response_delete.html'
     success_url = reverse_lazy('responses')
